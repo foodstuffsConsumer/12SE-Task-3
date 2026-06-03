@@ -19,34 +19,29 @@ center_y = int(screen_height / 2 - window_height / 2)
 
 root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-# --- WINDOW CONTENT ---
-
 root.title('soundcheck')
 root.iconbitmap('./assets/soundcheckICO.ico')
+
+root.resizable(0, 0)
+
+# --- WINDOW CONTENT ---
 
 rawImage = tk.PhotoImage(file='./assets/soundcheckPNG.png')
 image = rawImage.subsample(6,6)
 
-image_label = ttk.Label(
-    root,
-    image=image,
-    justify='left',
-    text='SoundCheck', 
-    font=("Helvetica", 50),
-    compound=tk.LEFT
-)
-image_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+title = ttk.Label(root, image=image, justify='left', text='SoundCheck', font=("Helvetica", 50), compound=tk.LEFT)
+title.grid(sticky='news', row=0, column=0, columnspan=3, padx=10, pady=10)
 
 menuStyle = ttk.Style()
 menuStyle.configure("MMS.TButton", font=('Helvetica', 35))
 
 addFilesButton = ttk.Button(root, text='Add Files', style="MMS.TButton", command=addFilesMenu)
-addFilesButton.grid(row=1, column=0, padx=10, pady=3, sticky='w')
+addFilesButton.grid(sticky='news', row=1, column=0, padx=10, pady=3)
 
 viewFilesButton = ttk.Button(root, text='View Files', style="MMS.TButton", command=viewFilesMenu)
-viewFilesButton.grid(row=2, column=0, padx=10, pady=3, sticky='w')
+viewFilesButton.grid(sticky='news', row=2, column=0, padx=10, pady=3)
 
 exitButton = ttk.Button(root, text='Exit', style="MMS.TButton", command=root.destroy)
-exitButton.grid(row=3, column=0, padx=10, pady=3, sticky='w')
+exitButton.grid(sticky='news', row=3, column=0, padx=10, pady=3)
 
 root.mainloop()
