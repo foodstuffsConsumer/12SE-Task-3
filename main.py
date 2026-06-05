@@ -45,16 +45,16 @@ menuStyle.configure("Menu.TButton", font=('Helvetica', 35))
 rawImage = tk.PhotoImage(file='./assets/soundcheckPNG.png')
 image = rawImage.subsample(6,6)
 
-title = ttk.Label(mainFrame, image=image, justify='left', text='SoundCheck', font=("Helvetica", 50), background='white', compound=tk.LEFT)
+title = ttk.Label(mainFrame, image=image, justify='left', text='soundcheck', font=("Helvetica", 50), background='white', compound=tk.LEFT)
 title.grid(sticky='news', row=0, column=0, columnspan=3, padx=10, pady=10)
 
-addFilesButton = ttk.Button(mainFrame, text='Add Files', style="Menu.TButton", command=addFilesMenu)
+addFilesButton = ttk.Button(mainFrame, text='add files', style="Menu.TButton", command=addFilesMenu)
 addFilesButton.grid(sticky='news', row=1, column=0, padx=10, pady=3)
 
-viewFilesButton = ttk.Button(mainFrame, text='View Files', style="Menu.TButton", command=lambda:tk.Frame.tkraise(vfFrame))
+viewFilesButton = ttk.Button(mainFrame, text='view files', style="Menu.TButton", command=lambda:tk.Frame.tkraise(vfFrame))
 viewFilesButton.grid(sticky='news', row=2, column=0, padx=10, pady=3)
 
-exitButton = ttk.Button(mainFrame, text='Exit', style="Menu.TButton", command=root.destroy)
+exitButton = ttk.Button(mainFrame, text='exit', style="Menu.TButton", command=root.destroy)
 exitButton.grid(sticky='news', row=3, column=0, padx=10, pady=3)
 
 # --- VIEW FILES FRAME WIDGETS ---
