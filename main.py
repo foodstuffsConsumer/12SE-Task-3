@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-from addFileModule import addFilesMenu
-from tagConfigModule import tagConfigMenu
+from modules.addFileModule import addFilesMenu
+from modules.tagConfigModule import tagConfigMenu
 
 # --- WINDOW SETUP ---
 
