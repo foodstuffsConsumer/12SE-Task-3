@@ -43,19 +43,20 @@ vfFrame.grid_columnconfigure(0, weight=1)
 vfTopFrame = tk.Frame(vfFrame, bg='white')
 vfTopFrame.grid(row=0, column=0, sticky='news')
 
-vfMidCanvas = tk.Canvas(vfFrame, bg='blue')
+vfMidCanvas = tk.Canvas(vfFrame)
 vfMidCanvas.grid(row=1, column=0, sticky='news')
 
-vfScrollbar = tk.Scrollbar(vfFrame, orient='vertical', command=vfMidCanvas.yview)
-vfScrollbar.grid(row=1, column=1, sticky='ns')
+vfMidScrollbar = tk.Scrollbar(vfFrame, orient='vertical', command=vfMidCanvas.yview)
+vfMidScrollbar.grid(row=1, column=1, sticky='news')
 
-vfMidCanvas.configure(yscrollcommand=vfScrollbar.set)
-
-vfMidFrame = tk.Frame(vfMidCanvas, bg='red')
-vfMidFrame.pack()
+vfMidCanvas.configure(yscrollcommand=vfMidScrollbar.set)
+vfMidFrame = tk.Frame(vfMidCanvas)
 
 vfMidCanvas.create_window((0, 0), window=vfMidFrame, anchor="nw")
 vfMidFrame.bind("<Configure>", lambda e: vfMidCanvas.configure(scrollregion=vfMidCanvas.bbox("all")))
+
+for i in range(30):
+    tk.Label(vfMidFrame, text=f"Item {i+1}", width=20).pack(pady=5)
 
 vfBtmFrame = tk.Frame(vfFrame, bg='white')
 vfBtmFrame.grid(row=2, column=0, sticky='news')
@@ -110,9 +111,6 @@ returnButton.pack(side='left', padx=59, pady=0)
 
 configButton = ttk.Button(vfBtmFrame, text='tag configuration', style='Menu.TButton', command=tagConfigMenu)
 configButton.pack(side='left', padx=0, pady=0)
-
-
-
 
 # --- INITIALISATION ---
 
