@@ -1,2 +1,5 @@
+import tkinter as tk
+from tkinter import filedialog
+
 def addFilesMenu():
-    print("Pretend files are being added.")
+    filedialog.askopenfilename(initialdir = "/", title = "Select a file.")

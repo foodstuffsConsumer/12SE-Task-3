@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from modules.addFileModule import addFilesMenu
 from modules.tagConfigModule import tagConfigMenu
+from modules.fileTagsModule import fileTagsPopup
 
 # --- WINDOW SETUP ---
 
@@ -55,8 +56,8 @@ vfMidFrame = tk.Frame(vfMidCanvas)
 vfMidCanvas.create_window((0, 0), window=vfMidFrame, anchor="nw")
 vfMidFrame.bind("<Configure>", lambda e: vfMidCanvas.configure(scrollregion=vfMidCanvas.bbox("all")))
 
-for i in range(30):
-    tk.Label(vfMidFrame, text=f"Item {i+1}", width=20).pack(pady=5)
+vfMidFrame.grid_columnconfigure(0, weight=10)
+vfMidFrame.grid_columnconfigure(1, weight=0)
 
 vfBtmFrame = tk.Frame(vfFrame, bg='white')
 vfBtmFrame.grid(row=2, column=0, sticky='news')
@@ -68,8 +69,8 @@ tk.Frame.tkraise(mainFrame)
 menuMainStyle = ttk.Style()
 menuMainStyle.configure("Menu.TButton", font=('Helvetica', 35))
 
-viewFilesTopStyle = ttk.Style()
-viewFilesTopStyle.configure("ViewTop.TButton", font=('Helveitca', 20))
+viewFilesStyle = ttk.Style()
+viewFilesStyle.configure("ViewFiles.TButton", font=('Helveitca', 20))
 
 # --- MAIN FRAME WIDGETS ---
 
@@ -90,7 +91,7 @@ exitButton.grid(row=3, column=0, padx=10, pady=3, sticky='news')
 
 # --- VIEW FILES FRAME WIDGETS ---
 
-filtersButton = ttk.Menubutton(vfTopFrame, text='tag filters', width=8, style='ViewTop.TButton')
+filtersButton = ttk.Menubutton(vfTopFrame, text='tag filters', width=8, style='ViewFiles.TButton')
 
 filtersTestList = ["Tag1", "Tag2", "Tag3", "TagA", "TagB"]
 filters_menu = tk.Menu(filtersButton, tearoff=0)
@@ -103,7 +104,7 @@ filtersButton.pack(side='left', padx=10, pady=0)
 searchBar = ttk.Entry(vfTopFrame, width=41, font=('Helvetica', 20))
 searchBar.pack(side='left', padx=0, pady=0)
 
-searchButton = ttk.Button(vfTopFrame, text='go', width=3, style='ViewTop.TButton', command=lambda:print("We didn't find anything. Because we weren't searching,"))
+searchButton = ttk.Button(vfTopFrame, text='go', width=3, style='ViewFiles.TButton', command=lambda:print("We didn't find anything. Because we weren't searching,"))
 searchButton.pack(side='left', padx=10, pady=0)
 
 returnButton = ttk.Button(vfBtmFrame, text='return to menu', style='Menu.TButton', command=lambda:tk.Frame.tkraise(mainFrame))
@@ -111,6 +112,14 @@ returnButton.pack(side='left', padx=59, pady=0)
 
 configButton = ttk.Button(vfBtmFrame, text='tag configuration', style='Menu.TButton', command=tagConfigMenu)
 configButton.pack(side='left', padx=0, pady=0)
+
+rawJMPImage = tk.PhotoImage(file='./assets/jumptofile.png')
+JMPImage = rawJMPImage.subsample(6, 6)
+
+for i in range(30):
+    ttk.Label(vfMidFrame, text=f"test item number {i+1}", font=('Helvetica', 20), background='white', width=46).grid(row=i, column=0, padx=5, pady=5, sticky='news')
+    ttk.Button(vfMidFrame, image=JMPImage, command=lambda:print("Jump To File"),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
+    ttk.Button(vfMidFrame, text="...", style='ViewFiles.TButton', command=lambda:fileTagsPopup(),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
 
 # --- INITIALISATION ---
 
