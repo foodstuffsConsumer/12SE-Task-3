@@ -1,5 +1,7 @@
-import tkinter as tk
 from tkinter import filedialog
+from pathlib import Path
 
 def addEntryMenu():
-    filedialog.askopenfilename(initialdir = "/", title = "Select a file.")
+    entry = filedialog.askopenfilename(initialdir = "/", title = "Select a file.")
+    return Path(entry)
+    
