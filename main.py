@@ -1,9 +1,33 @@
+import json
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 
-from modules.addEntryModule import addEntryMenu
 from modules.tagConfigModule import tagConfigMenu
 from modules.entryTagsModule import entryTagsPopup
+
+# --- FUNCTIONS ---
+
+def addEntryMenu():
+    file = filedialog.askopenfilename(initialdir = "/", title = "Select a file.")
+    if not file:
+        return
+    
+    entry = {
+        "file": file,
+        "tags": []
+    }
+
+    try:
+        with open('data.json') as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = []
+
+    data.append(entry)
+
+    with open("data.json", "w") as f:
+        json.dump(data, f, indent=1)
 
 # --- WINDOW SETUP ---
 
