@@ -6,6 +6,12 @@ from tkinter import filedialog
 from modules.tagConfigModule import tagConfigMenu
 from modules.entryTagsModule import entryTagsPopup
 
+try:
+    with open('data.json') as f:
+        data = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError):
+    data = []
+
 # --- FUNCTIONS ---
 
 def addEntryMenu():
@@ -18,16 +24,16 @@ def addEntryMenu():
         "tags": []
     }
 
-    try:
-        with open('data.json') as f:
-            data = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        data = []
-
     data.append(entry)
 
     with open("data.json", "w") as f:
         json.dump(data, f, indent=1)
+
+    for i in range(len(data)):
+        ttk.Label(vfMidFrame, text=f"test item number {i+1}", font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=JMPImage, command=lambda:print("Jump To File"),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=TAGImage, command=lambda:entryTagsPopup(),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=DELImage, command=lambda:print("Delete Entry"),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
 
 # --- WINDOW SETUP ---
 
@@ -107,7 +113,7 @@ title.grid(row=0, column=0, columnspan=3, padx=10, pady=10, sticky='news')
 addEntriesButton = ttk.Button(mainFrame, text='add entries', style="Menu.TButton", command=addEntryMenu)
 addEntriesButton.grid(row=1, column=0, padx=10, pady=3, sticky='news')
 
-viewEntriesButton = ttk.Button(mainFrame, text='view entries', style="Menu.TButton", command=lambda:tk.Frame.tkraise(vfFrame))
+viewEntriesButton = ttk.Button(mainFrame, text='view entries', style="Menu.TButton", command=lambda:[tk.Frame.tkraise(vfFrame)])
 viewEntriesButton.grid(row=2, column=0, padx=10, pady=3, sticky='news')
 
 exitButton = ttk.Button(mainFrame, text='exit', style="Menu.TButton", command=root.destroy)
@@ -145,12 +151,6 @@ TAGImage = rawTAGImage.subsample(6, 6)
 
 rawDELImage = tk.PhotoImage(file="./assets/delete.png")
 DELImage = rawDELImage.subsample(6, 6)
-
-for i in range(30):
-    ttk.Label(vfMidFrame, text=f"test item number {i+1}", font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
-    ttk.Button(vfMidFrame, image=JMPImage, command=lambda:print("Jump To File"),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
-    ttk.Button(vfMidFrame, image=TAGImage, command=lambda:entryTagsPopup(),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
-    ttk.Button(vfMidFrame, image=DELImage, command=lambda:print("Delete Entry"),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
 
 # --- INITIALISATION ---
 
