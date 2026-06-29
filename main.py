@@ -2,9 +2,7 @@ import json
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
-
-from modules.tagConfigModule import tagConfigMenu
-from modules.entryTagsModule import entryTagsPopup
+from pathlib import Path
 
 try:
     with open('data.json') as f:
@@ -14,6 +12,28 @@ except (FileNotFoundError, json.JSONDecodeError):
 
 # --- FUNCTIONS ---
 
+def jumpToFile():
+    print("Jump To File")
+
+def entryTags():
+    print("Modify Entry Tags")
+
+def deleteEntry():
+    print("Delete Entry")
+
+def tagConfigMenu():
+    print("Tag Configuration")
+
+def searchForEntry():
+    print("Search For Entry")
+
+def updateEntries():
+    for i in range(len(data)):
+        ttk.Label(vfMidFrame, text=f"{data[i]['name']}", font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=JMPImage, command=lambda:jumpToFile(),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=TAGImage, command=lambda:entryTags(),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=DELImage, command=lambda:deleteEntry(),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
+
 def addEntryMenu():
     file = filedialog.askopenfilename(initialdir = "/", title = "Select a file.")
     if not file:
@@ -21,6 +41,7 @@ def addEntryMenu():
     
     entry = {
         "file": file,
+        "name": Path(file).stem,
         "tags": []
     }
 
@@ -29,11 +50,7 @@ def addEntryMenu():
     with open("data.json", "w") as f:
         json.dump(data, f, indent=1)
 
-    for i in range(len(data)):
-        ttk.Label(vfMidFrame, text=f"test item number {i+1}", font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=JMPImage, command=lambda:print("Jump To File"),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=TAGImage, command=lambda:entryTagsPopup(),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=DELImage, command=lambda:print("Delete Entry"),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
+    updateEntries()
 
 # --- WINDOW SETUP ---
 
@@ -134,13 +151,13 @@ filtersButton.pack(side='left', padx=10, pady=0)
 searchBar = ttk.Entry(vfTopFrame, width=41, font=('Helvetica', 20))
 searchBar.pack(side='left', padx=0, pady=0)
 
-searchButton = ttk.Button(vfTopFrame, text='go', width=3, style='ViewEntries.TButton', command=lambda:print("We didn't find anything. Because we weren't searching,"))
+searchButton = ttk.Button(vfTopFrame, text='go', width=3, style='ViewEntries.TButton', command=lambda:searchForEntry())
 searchButton.pack(side='left', padx=10, pady=0)
 
 returnButton = ttk.Button(vfBtmFrame, text='return to menu', style='Menu.TButton', command=lambda:tk.Frame.tkraise(mainFrame))
 returnButton.pack(side='left', padx=59, pady=0)
 
-configButton = ttk.Button(vfBtmFrame, text='tag configuration', style='Menu.TButton', command=tagConfigMenu)
+configButton = ttk.Button(vfBtmFrame, text='tag configuration', style='Menu.TButton', command=lambda:tagConfigMenu())
 configButton.pack(side='left', padx=0, pady=0)
 
 rawJMPImage = tk.PhotoImage(file='./assets/jumptofile.png')
@@ -154,4 +171,5 @@ DELImage = rawDELImage.subsample(6, 6)
 
 # --- INITIALISATION ---
 
+updateEntries()
 root.mainloop()
