@@ -1,3 +1,4 @@
+import os
 import json
 import tkinter as tk
 from tkinter import ttk
@@ -12,14 +13,15 @@ except (FileNotFoundError, json.JSONDecodeError):
 
 # --- FUNCTIONS ---
 
-def jumpToFile():
-    print("Jump To File")
+def jumpToFile(filepath):
+    os.startfile(filepath)
 
 def entryTags():
     print("Modify Entry Tags")
 
-def deleteEntry():
-    print("Delete Entry")
+def deleteEntry(delEntry):
+    data.remove(delEntry)
+    updateEntries()
 
 def tagConfigMenu():
     print("Tag Configuration")
@@ -28,11 +30,14 @@ def searchForEntry():
     print("Search For Entry")
 
 def updateEntries():
+    for widget in vfMidFrame.winfo_children():
+        widget.destroy()
+
     for i in range(len(data)):
-        ttk.Label(vfMidFrame, text=f"{data[i]['name']}", font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=JMPImage, command=lambda:jumpToFile(),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=TAGImage, command=lambda:entryTags(),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
-        ttk.Button(vfMidFrame, image=DELImage, command=lambda:deleteEntry(),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
+        ttk.Label(vfMidFrame, text=data[i]['name'], font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=JMPImage, command=lambda i=i:jumpToFile(data[i]['filepath']),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=TAGImage, command=lambda i=i:entryTags(data[i]['tags']),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
+        ttk.Button(vfMidFrame, image=DELImage, command=lambda i=i:deleteEntry(data[i]),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
 
 def addEntryMenu():
     file = filedialog.askopenfilename(initialdir = "/", title = "Select a file.")
@@ -40,7 +45,7 @@ def addEntryMenu():
         return
     
     entry = {
-        "file": file,
+        "filepath": file,
         "name": Path(file).stem,
         "tags": []
     }
