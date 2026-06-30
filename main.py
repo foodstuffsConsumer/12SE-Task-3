@@ -11,12 +11,6 @@ try:
 except (FileNotFoundError, json.JSONDecodeError):
     data = []
 
-try:
-    with open('tags.json') as f:
-        tags = json.load(f)
-except (FileNotFoundError, json.JSONDecodeError):
-    tags = []
-
 searchedData = []
 
 # --- FUNCTIONS ---
@@ -45,9 +39,6 @@ def makeScrollableFrame(parent, row=1, column=0):
 def jumpToFile(filepath):
     os.startfile(filepath)
 
-def entryTags():
-    print("Modify Entry Tags")
-
 def deleteEntry(delEntry):
     data.remove(delEntry)
     if delEntry in searchedData:
@@ -60,16 +51,6 @@ def swapMenu(frame):
     tk.Frame.tkraise(frame)
     tk.Frame.tkraise(vfMidCanvas)
     searchBar.delete(0, tk.END)
-
-def tagConfigMenu():
-    tcMenu = tk.Toplevel(root)
-    tcMenu.title("Tag Configuration")
-    tcMenu.geometry("400x200")
-    tcMenu.resizable(0, 0)
-
-    tcFrame = tk.Frame(tcMenu, bg='black')
-    tcFrame.grid(row=0, column=0, sticky='news')
-    tcCanvas, tcScrollbar, tcFrame = makeScrollableFrame(tcFrame, row=1, column=0)
 
 def searchForEntry(frame, toSearch):
     if not toSearch:
@@ -98,9 +79,8 @@ def updateEntries(frame, list):
         widget.destroy()
 
     for i in range(len(list)):
-        ttk.Label(frame, text=list[i]['name'], font=('Helvetica', 20), background='white', width=43).grid(row=i, column=0, padx=5, pady=5, sticky='news')
+        ttk.Label(frame, text=list[i]['name'], font=('Helvetica', 20), background='white', width=47).grid(row=i, column=0, padx=5, pady=5, sticky='news')
         ttk.Button(frame, image=JMPImage, command=lambda i=i:jumpToFile(list[i]['filepath']),width=3).grid(row=i, column=1, padx=5, pady=5, sticky='news')
-        ttk.Button(frame, image=TAGImage, command=lambda i=i:entryTags(list[i]['tags']),width=3).grid(row=i, column=2, padx=5, pady=5, sticky='news')
         ttk.Button(frame, image=DELImage, command=lambda i=i:deleteEntry(list[i]),width=3).grid(row=i, column=3, padx=5, pady=5, sticky='news')
 
     with open("data.json", "w") as f:
@@ -114,7 +94,6 @@ def addEntryMenu():
     entry = {
         "filepath": file,
         "name": Path(file).stem,
-        "tags": []
     }
 
     data.append(entry)
@@ -196,32 +175,17 @@ exitButton.grid(row=3, column=0, padx=10, pady=3, sticky='news')
 
 # --- VIEW ENTRIES FRAME WIDGETS ---
 
-filtersButton = ttk.Menubutton(vfTopFrame, text='tag filters', width=8, style='ViewEntries.TButton')
-
-filters_menu = tk.Menu(filtersButton, tearoff=0)
-for i in tags:
-    filters_menu.add_command(label=i)
-
-filtersButton["menu"] = filters_menu
-filtersButton.pack(side='left', padx=10, pady=0)
-
-searchBar = ttk.Entry(vfTopFrame, width=41, font=('Helvetica', 20))
-searchBar.pack(side='left', padx=0, pady=0)
+searchBar = ttk.Entry(vfTopFrame, width=49, font=('Helvetica', 20))
+searchBar.pack(side='left', padx=20, pady=0)
 
 searchButton = ttk.Button(vfTopFrame, text='go', width=3, style='ViewEntries.TButton', command=lambda:searchForEntry(vfMidFrame, searchBar.get()))
-searchButton.pack(side='left', padx=10, pady=0)
+searchButton.pack(side='left', padx=0, pady=0)
 
 returnButton = ttk.Button(vfBtmFrame, text='return to menu', style='Menu.TButton', command=lambda:swapMenu(mainFrame))
-returnButton.pack(side='left', padx=59, pady=0)
-
-configButton = ttk.Button(vfBtmFrame, text='tag configuration', style='Menu.TButton', command=lambda:tagConfigMenu())
-configButton.pack(side='left', padx=0, pady=0)
+returnButton.pack(side='bottom', padx=0, pady=10)
 
 rawJMPImage = tk.PhotoImage(file='./assets/jumptofile.png')
 JMPImage = rawJMPImage.subsample(6, 6)
-
-rawTAGImage = tk.PhotoImage(file="./assets/tags.png")
-TAGImage = rawTAGImage.subsample(6, 6)
 
 rawDELImage = tk.PhotoImage(file="./assets/delete.png")
 DELImage = rawDELImage.subsample(6, 6)
