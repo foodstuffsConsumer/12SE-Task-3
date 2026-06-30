@@ -1,5 +1,6 @@
 import os
 import json
+import subprocess
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
@@ -37,7 +38,7 @@ def makeScrollableFrame(parent, row=1, column=0):
     return canvas, scrollbar, frame
 
 def jumpToFile(filepath):
-    os.startfile(filepath)
+    subprocess.run(["explorer", "/select,", os.path.normpath(filepath)])
 
 def deleteEntry(delEntry):
     data.remove(delEntry)
