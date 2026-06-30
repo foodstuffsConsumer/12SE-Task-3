@@ -37,8 +37,21 @@ def makeScrollableFrame(parent, row=1, column=0):
 
     return canvas, scrollbar, frame
 
+def errorMessage(message):
+    error = tk.Toplevel(root)
+    error.title("Whoops!")
+    error.geometry("500x100")
+    error.resizable(0, 0)
+
+    ttk.Label(error, text=message).pack(anchor='center', pady=5)
+    ttk.Button(error, text='Okay', command=error.destroy).pack(side='bottom', pady=5)
+
 def jumpToFile(filepath):
-    subprocess.run(["explorer", "/select,", os.path.normpath(filepath)])
+    path = Path(filepath)
+    if path.exists():
+        subprocess.run(["explorer", "/select,", os.path.normpath(filepath)])
+    else:
+        errorMessage('The file the entry should direct you to either no longer exists or has been moved.')
 
 def deleteEntry(delEntry):
     data.remove(delEntry)
